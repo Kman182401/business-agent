@@ -1,0 +1,12 @@
+# Secret parameter files
+sql/params/roles.env
+.env
+.env.local
+.env.bak.*
+
+# Local virtual environments
+.venv/
+.fd-venv/
+
+# Bytecode caches
+__pycache__/

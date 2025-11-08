@@ -25,7 +25,7 @@ This repository is the **single source of truth** for everything that lives in `
   - Later runs detect whether there are changes; if none, the script exits cleanly without creating empty commits.
   - Set `SKIP_PUSH=1` when you want to create a local commit without pushing (useful while offline or before entering credentials).
   - Override defaults with `REMOTE_URL` or `BRANCH_NAME` env vars if you ever fork or use a different branch.
-- **Automation already running**: cron executes `*/15 * * * * /home/karson/Business\ Agents/scripts/sync_business_agents.sh >> /home/karson/logs/business-agents-sync.log 2>&1`, so GitHub receives every change within 15 minutes. Check `~/logs/business-agents-sync.log` for sync history.
+- **Automation ready**: A cron entry like `*/15 * * * * ~/Business\ Agents/scripts/sync_business_agents.sh >> ~/logs/business-agents-sync.log 2>&1` keeps GitHub within 15 minutes; this schedule is already in place on the primary workstation—use the same pattern with your own paths on other machines.
 
 ---
 

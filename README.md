@@ -4,6 +4,14 @@ _Last updated: 7 November 2025_
 
 This repository is the **single source of truth** for everything that lives in `~/Business Agents` on the local machine. It contains the database schema, FastAPI backend, realtime Twilio/OpenAI bridge, local tooling, and operations docs for the restaurant front-desk agent. The repo is meant to mirror the folder exactly—use `scripts/sync_business_agents.sh` to push every change (adds, edits, removals) to the private GitHub repo `github.com/Kman182401/business-agent`.
 
+### Plain-English Snapshot
+- Think of this project as a **virtual front desk teammate**. It answers phone calls, checks the restaurant calendar, saves reservations, and can talk through Twilio just like a human host.
+- The **database scripts** define how restaurants, hours, blackouts, and reservation slots are stored so double bookings can’t happen.
+- The **FastAPI app** is the brain that receives API requests, checks rules, talks to Redis for short-term holds, and writes confirmed reservations into Postgres.
+- The **Twilio/OpenAI realtime bridge** streams live audio between callers and OpenAI’s voice model so guests hear a natural assistant.
+- The **sync script** is a “publish” button: run it and whatever is currently in `~/Business Agents` shows up in GitHub.
+- If someone brand new reads only this section plus §2, they can understand what exists, what it does today, and what’s left to finish.
+
 ---
 
 ## 1. Repository Scope & Sync Automation
@@ -21,6 +29,14 @@ This repository is the **single source of truth** for everything that lives in `
 ---
 
 ## 2. Current State of the Front Desk Agent
+### System Capabilities at a Glance
+1. **Answering calls** – Twilio sends live audio to `/ws/twilio-stream`, the OpenAI model responds in real time, and callers hear a natural-sounding voice.
+2. **Holding slots** – `/api/v1/availability/check` pre-reserves a slot for five minutes using Redis, so the next caller can’t steal it.
+3. **Booking reservations** – `/api/v1/reservations/commit` locks the slot inside Postgres, preventing double bookings even with many simultaneous callers.
+4. **Enforcing capacity rules** – SQL functions plus advisory locks limit total parties and covers every 15 minutes, honoring holidays/blackouts.
+5. **Health monitoring** – `/api/v1/healthz` and `/api/v1/readiness` prove the app, Postgres, and Redis are reachable before calls are routed.
+6. **Observability hooks** – Redis keys, Postgres diagnostics, and Alembic migrations enable troubleshooting and future CI/CD automation.
+
 ### 2.1 Data & Persistence (Step 1 complete)
 - `sql/001_extensions.sql` – enables `pgcrypto`, `btree_gist`, and `pg_stat_statements` for UUIDs, exclusion constraints, and perf diagnostics.
 - `sql/010_schema.sql` – defines restaurants, operating hours, blackout windows, per-slot capacity rules, reservations, and an `event_log` table. Includes GiST range indexes plus a `(restaurant_id, slot_id, shard)` uniqueness guard.

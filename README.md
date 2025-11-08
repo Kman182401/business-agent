@@ -23,6 +23,7 @@ This repository is the **single source of truth** for everything that lives in `
   ```
   - First run initialises `.git`, sets the default branch to `main`, and adds the origin remote.
   - Later runs detect whether there are changes; if none, the script exits cleanly without creating empty commits.
+  - Set `SKIP_PUSH=1` when you want to create a local commit without pushing (useful while offline or before entering credentials).
   - Override defaults with `REMOTE_URL` or `BRANCH_NAME` env vars if you ever fork or use a different branch.
 - **Optional automation**: add `0 * * * * /home/karson/Business\ Agents/scripts/sync_business_agents.sh` to `crontab -e` to publish once an hour. The script is idempotent and safe to run unattended; failures (e.g., missing GitHub auth) simply raise errors so you can fix credentials.
 

@@ -50,5 +50,10 @@ else
   git commit -m "$COMMIT_MESSAGE"
 fi
 
+if [ "${SKIP_PUSH:-0}" = "1" ]; then
+  echo "[sync] SKIP_PUSH=1 detected; skipping git push (local repo is still up to date)."
+  exit 0
+fi
+
 echo "[sync] Pushing to origin/$BRANCH_NAME"
 git push origin "$BRANCH_NAME"

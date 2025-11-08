@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-REMOTE_URL="${REMOTE_URL:-https://github.com/Kman182401/business-agent.git}"
+REMOTE_URL="${REMOTE_URL:-git@github.com:Kman182401/business-agent.git}"
 BRANCH_NAME="${BRANCH_NAME:-main}"
 COMMIT_MESSAGE=${1:-}
 

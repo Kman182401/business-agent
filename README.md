@@ -16,7 +16,7 @@ This repository is the **single source of truth** for everything that lives in `
 
 ## 1. Repository Scope & Sync Automation
 - **What is tracked**: every file under `~/Business Agents` except virtual environments, compiled caches, and secret `.env` files that are intentionally git-ignored.
-- **Sync script**: `scripts/sync_business_agents.sh` bootstraps git (if needed), points `origin` at `https://github.com/Kman182401/business-agent.git`, commits the current working tree, and pushes to `main`.
+- **Sync script**: `scripts/sync_business_agents.sh` bootstraps git (if needed), points `origin` at `git@github.com:Kman182401/business-agent.git`, commits the current working tree, and pushes to `main`.
   ```bash
   # From anywhere
   ~/Business\ Agents/scripts/sync_business_agents.sh "Add schedule parser"
@@ -25,7 +25,7 @@ This repository is the **single source of truth** for everything that lives in `
   - Later runs detect whether there are changes; if none, the script exits cleanly without creating empty commits.
   - Set `SKIP_PUSH=1` when you want to create a local commit without pushing (useful while offline or before entering credentials).
   - Override defaults with `REMOTE_URL` or `BRANCH_NAME` env vars if you ever fork or use a different branch.
-- **Optional automation**: add `0 * * * * /home/karson/Business\ Agents/scripts/sync_business_agents.sh` to `crontab -e` to publish once an hour. The script is idempotent and safe to run unattended; failures (e.g., missing GitHub auth) simply raise errors so you can fix credentials.
+- **Automation already running**: cron executes `*/15 * * * * /home/karson/Business\ Agents/scripts/sync_business_agents.sh >> /home/karson/logs/business-agents-sync.log 2>&1`, so GitHub receives every change within 15 minutes. Check `~/logs/business-agents-sync.log` for sync history.
 
 ---
 
